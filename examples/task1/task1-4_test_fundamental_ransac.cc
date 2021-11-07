@@ -14,7 +14,8 @@
 #include <set>
 #include <util/system.h>
 #include <sfm/ransac_fundamental.h>
-#include <cassert>
+#include <assert.h>
+#include <cmath>
 #include "math/functions.h"
 #include "sfm/fundamental.h"
 #include "sfm/correspondence.h"
@@ -41,15 +42,10 @@ int  calc_ransac_iterations (double p,
 
     /** TODO HERE
      * Coding here**/
-    return 0;
-
-
-    /** Reference
-    double prob_all_good = math::fastpow(p, K);
-    double num_iterations = std::log(1.0 - z)
-                            / std::log(1.0 - prob_all_good);
-    return static_cast<int>(math::round(num_iterations));
-     */
+    double M(0);
+    M = log(1 - z) / log(1 - pow(p, K));
+    
+    return M;
 
 }
 
@@ -170,20 +166,13 @@ std::vector<int> find_inliers(sfm::Correspondences2D2D const & matches
     const double squared_thresh = thresh* thresh;
 
     std::vector<int> inliers;
-
-    /**
-     * TODO HERE
-     *
-     * Coding here **/
-
-    /** Reference
-    for(int i=0; i< matches.size(); i++){
-        double error = calc_sampson_distance(F, matches[i]);
-        if(error< squared_thresh){
-            inliers.push_back(i);
+    for(int k=0;k< matches.size();k++){
+        double err = calc_sampson_distance(F, matches[k]);
+        if(err < squared_thresh){
+            inliers.push_back(k);
         }
     }
-     **/
+
     return inliers;
 }
 
@@ -193,13 +182,12 @@ int main(int argc, char *argv[]){
 
     /** 加载归一化后的匹配对 */
     sfm::Correspondences2D2D corr_all;
-    std::ifstream in("./examples/task1/correspondences.txt");
+    std::ifstream in("/home/weiyun-chen/Documents/MVS Course/ImageBasedModellingEdu/examples/task1/correspondences.txt");
     assert(in.is_open());
 
     std::string line, word;
     int n_line = 0;
     while(getline(in, line)){
-
         std::stringstream stream(line);
         if(n_line==0){
             int n_corrs = 0;
@@ -221,7 +209,6 @@ int main(int argc, char *argv[]){
     const float inlier_ratio =0.5;
     const int n_samples=8;
     int n_iterations = calc_ransac_iterations(inlier_ratio, n_samples);
-
     // 用于判读匹配对是否为内点
     const double inlier_thresh = 0.0015;
 
@@ -256,7 +243,6 @@ int main(int argc, char *argv[]){
         /*2.0 8点法估计相机基础矩阵*/
         FundamentalMatrix F;
         calc_fundamental_8_point(pset1, pset2,F);
-
         /*3.0 统计所有的内点个数*/
         std::vector<int> inlier_indices = find_inliers(corr_all, F, inlier_thresh);
 
