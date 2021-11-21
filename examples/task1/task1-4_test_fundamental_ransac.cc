@@ -40,13 +40,9 @@ int  calc_ransac_iterations (double p,
                            int K,
                            double z = 0.99){
 
-    /** TODO HERE
-     * Coding here**/
     double M(0);
     M = log(1 - z) / log(1 - pow(p, K));
-    
     return M;
-
 }
 
 /**
@@ -182,7 +178,7 @@ int main(int argc, char *argv[]){
 
     /** 加载归一化后的匹配对 */
     sfm::Correspondences2D2D corr_all;
-    std::ifstream in("/home/weiyun-chen/Documents/MVS Course/ImageBasedModellingEdu/examples/task1/correspondences.txt");
+    std::ifstream in("/home/weiyun-chen/Documents/MVS_Course/ImageBasedModellingEdu/examples/task1/correspondences.txt");
     assert(in.is_open());
 
     std::string line, word;

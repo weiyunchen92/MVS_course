@@ -127,11 +127,10 @@ bool calc_cam_poses(FundamentalMatrix const &F
     K1(0, 0) = K1(1, 1) = f1; K1(2,2)=1.0;
     K2(0, 0) = K2(1, 1) = f2; K2(2,2) =1.0;
 
-    /**  TODO BERE
-     * 计算本质矩阵E*/
+    /* 计算本质矩阵E*/
     EssentialMatrix E = K2.transpose() * F * K1;
 
-    std::cout<<"EssentialMatrix result is "<<E<<std::endl;
+    std::cout<<"EssentialMatrix result is \n"<<E<<std::endl;
     std::cout<<"EssentialMatrix should be: \n"
              <<"-0.00490744 -0.0146139 0.34281\n"
              <<"0.0212215 -0.000748851 -0.0271105\n"
