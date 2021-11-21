@@ -780,6 +780,7 @@ void lm_optimization(std::vector<sfm::ba::Camera>*cameras
         //2.0 预置共轭梯梯度法对正规方程进行求解*/
         DenseVectorType delta_x;
         sfm::ba::LinearSolver::Status cg_status = my_solve_schur(Jc, Jp, F, &delta_x);
+        // 如果成功，这里更新了delta_x
 
         //3.0 根据计算得到的偏移量，重新计算冲投影误差和均方误差，用于判断终止条件和更新条件.
         double new_mse, delta_mse, delta_mse_ratio = 1.0;
@@ -865,7 +866,8 @@ int main(int argc, char* argv[])
 {
 
     /* 加载数据 */
-    load_data("./examples/task2/test_ba.txt",cameras, points, observations);
+    load_data("/home/weiyun-chen/Documents/MVS_Course/ImageBasedModellingEdu/examples/task2/test_ba.txt",
+                cameras, points, observations);
 
     lm_optimization(&cameras, &points, &observations);
 
